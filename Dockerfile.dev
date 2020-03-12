@@ -1,7 +1,5 @@
 FROM clojure
 
-RUN apk --no-cache add ca-certificates=20190108-r0 libc6-compat=1.1.19-r10
-
 RUN mkdir -p /car-pooling-challenge
 
 COPY ./car-pooling-challenge/project.clj /car-pooling-challenge
