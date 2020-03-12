@@ -1,6 +1,6 @@
 FROM clojure:openjdk-14-alpine
 
-RUN apk --no-cache add ca-certificates=20190108-r0 libc6-compat=1.1.19-r10
+RUN apk --no-cache add ca-certificates=20190108-r0 libc6-compat
 
 RUN mkdir -p /car-pooling-challenge
 
