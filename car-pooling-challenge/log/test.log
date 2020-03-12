@@ -1,0 +1,48 @@
+2020-03-12 13:52:33,198 [main] INFO  test.env - 
+-=[test started successfully using the development profile]=- 
+2020-03-12 13:52:33,947 [main] INFO  luminus.http-server - server started on port 3000 
+2020-03-12 13:52:33,947 [main] INFO  test.nrepl - starting nREPL server on port 7000 
+2020-03-12 13:52:33,969 [main] INFO  test.core - #'test.config/env started 
+2020-03-12 13:52:33,969 [main] INFO  test.core - #'test.handler/init-app started 
+2020-03-12 13:52:33,970 [main] INFO  test.core - #'test.handler/app-routes started 
+2020-03-12 13:52:33,970 [main] INFO  test.core - #'test.core/http-server started 
+2020-03-12 13:52:33,970 [main] INFO  test.core - #'test.core/repl-server started 
+2020-03-12 13:56:09,129 [Thread-9] INFO  test.nrepl - nREPL server stopped 
+2020-03-12 13:56:09,168 [Thread-9] INFO  luminus.http-server - HTTP server stopped 
+2020-03-12 13:56:09,170 [Thread-9] INFO  test.env - 
+-=[test has shut down successfully]=- 
+2020-03-12 13:56:09,174 [Thread-9] INFO  test.core - #'test.core/repl-server stopped 
+2020-03-12 13:56:09,175 [Thread-9] INFO  test.core - #'test.core/http-server stopped 
+2020-03-12 13:56:09,175 [Thread-9] INFO  test.core - #'test.handler/init-app stopped 
+2020-03-12 14:53:38,425 [main] INFO  test.env - 
+-=[test started successfully using the development profile]=- 
+2020-03-12 14:53:39,112 [main] INFO  luminus.http-server - server started on port 8000 
+2020-03-12 14:53:39,115 [main] INFO  test.nrepl - starting nREPL server on port 7000 
+2020-03-12 14:53:39,133 [main] INFO  test.core - #'test.config/env started 
+2020-03-12 14:53:39,133 [main] INFO  test.core - #'test.handler/init-app started 
+2020-03-12 14:53:39,134 [main] INFO  test.core - #'test.handler/app-routes started 
+2020-03-12 14:53:39,134 [main] INFO  test.core - #'test.core/http-server started 
+2020-03-12 14:53:39,135 [main] INFO  test.core - #'test.core/repl-server started 
+2020-03-12 14:54:24,559 [Thread-9] INFO  test.nrepl - nREPL server stopped 
+2020-03-12 14:54:24,590 [Thread-9] INFO  luminus.http-server - HTTP server stopped 
+2020-03-12 14:54:24,591 [Thread-9] INFO  test.env - 
+-=[test has shut down successfully]=- 
+2020-03-12 14:54:24,592 [Thread-9] INFO  test.core - #'test.core/repl-server stopped 
+2020-03-12 14:54:24,592 [Thread-9] INFO  test.core - #'test.core/http-server stopped 
+2020-03-12 14:54:24,592 [Thread-9] INFO  test.core - #'test.handler/init-app stopped 
+2020-03-12 15:07:00,764 [main] INFO  test.env - 
+-=[test started successfully using the development profile]=- 
+2020-03-12 15:07:01,408 [main] INFO  luminus.http-server - server started on port 8000 
+2020-03-12 15:07:01,410 [main] INFO  test.nrepl - starting nREPL server on port 7000 
+2020-03-12 15:07:01,424 [main] INFO  test.core - #'test.config/env started 
+2020-03-12 15:07:01,425 [main] INFO  test.core - #'test.handler/init-app started 
+2020-03-12 15:07:01,425 [main] INFO  test.core - #'test.handler/app-routes started 
+2020-03-12 15:07:01,425 [main] INFO  test.core - #'test.core/http-server started 
+2020-03-12 15:07:01,425 [main] INFO  test.core - #'test.core/repl-server started 
+2020-03-12 15:07:46,750 [Thread-9] INFO  test.nrepl - nREPL server stopped 
+2020-03-12 15:07:46,782 [Thread-9] INFO  luminus.http-server - HTTP server stopped 
+2020-03-12 15:07:46,783 [Thread-9] INFO  test.env - 
+-=[test has shut down successfully]=- 
+2020-03-12 15:07:46,784 [Thread-9] INFO  test.core - #'test.core/repl-server stopped 
+2020-03-12 15:07:46,784 [Thread-9] INFO  test.core - #'test.core/http-server stopped 
+2020-03-12 15:07:46,785 [Thread-9] INFO  test.core - #'test.handler/init-app stopped 
