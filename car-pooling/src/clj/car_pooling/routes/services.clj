@@ -13,7 +13,7 @@
     [clojure.java.io :as io]))
 
 (defn service-routes []
-  ["/api"
+  [""
    {:coercion spec-coercion/coercion
     :muuntaja formats/instance
     :swagger {:id ::api}
@@ -47,8 +47,8 @@
              {:url "/api/swagger.json"
               :config {:validator-url nil}})}]]
 
-   ["/ping"
-    {:get (constantly (ok {:message "pong"}))}]
+   ["/status"
+    {:get (constantly (ok {}))}]
    
 
    ["/math"
