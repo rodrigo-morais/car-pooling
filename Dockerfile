@@ -1,17 +1,18 @@
 FROM clojure:openjdk-14-alpine
 
-RUN apk --no-cache add ca-certificates=20190108-r0 libc6-compat
-
 RUN mkdir -p /car-pooling-challenge
-
-COPY ./car-pooling-challenge/project.clj /car-pooling-challenge
-
 WORKDIR /car-pooling-challenge
 
+COPY /car-pooling/project.clj ./
 RUN lein deps
 
-COPY /car-pooling-challenge/. /car-pooling-challenge
+COPY /car-pooling/. ./
+
+RUN lein uberjar
+
+RUN apk --no-cache add ca-certificates=20190108-r0 libc6-compat
 
 EXPOSE 9091
+ENV PORT=9091
 
-ENTRYPOINT ["lein", "run", "-p", "9091"]
+ENTRYPOINT ["java", "-jar", "/car-pooling-challenge/target/uberjar/car-pooling.jar"]
