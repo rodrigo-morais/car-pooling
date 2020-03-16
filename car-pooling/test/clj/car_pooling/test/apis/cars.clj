@@ -18,7 +18,7 @@
     (testing "cars"
       (testing "load-cars"
         (testing "returns 200 as status and the body with cars"
-          (is (= (load-cars cars) {:status 200 :body {:cars cars}})))))
+          (is (= (load-cars cars) {:status 200})))))
         (testing "calls `load-cars` from data.actions"
           (let [call-load-cars (atom 0)]
             (with-redefs [ac/load-cars (fn [cars] (swap! call-load-cars + 1) nil)]

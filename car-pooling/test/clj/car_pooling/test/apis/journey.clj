@@ -18,7 +18,7 @@
     (testing "journey"
       (testing "add-journey"
         (testing "returns 200 as status and the body with the journey"
-          (is (= (add-journey journey) {:status 200 :body {:journey journey}})))))
+          (is (= (add-journey journey) {:status 200})))))
         (testing "calls `add-journey` from data.actions"
           (let [call-add-journey (atom 0)]
             (with-redefs [ac/add-journey (fn [journey] (swap! call-add-journey + 1) nil)]

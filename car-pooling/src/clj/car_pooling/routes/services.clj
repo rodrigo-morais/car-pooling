@@ -65,7 +65,7 @@
     ["/cars"
       {:put {:summary "Load the list of available cars"
               :parameters {:body ::cars}
-              :responses {200 {:body {}}
+              :responses {200 {:body nil}
                           400 {:body {}}}
               :handler (fn [{{:keys [body]} :parameters}]
                 (load-cars body))}}]
@@ -73,7 +73,7 @@
     ["/journey"
       {:post {:summary "Add a journey"
               :parameters {:body ::journey}
-              :responses {200 {:body {}}
+              :responses {200 {:body nil}
                           400 {:body {}}}
               :handler (fn [{{:keys [body]} :parameters}]
                 (add-journey body))}}]])

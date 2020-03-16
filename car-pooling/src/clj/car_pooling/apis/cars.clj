@@ -3,4 +3,4 @@
 
   (defn load-cars [cars]
     (ac/load-cars cars)
-    {:status 200 :body {:cars cars}})
+    {:status 200})

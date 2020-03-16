@@ -4,4 +4,4 @@
 
   (defn add-journey [journey]
     (ac/add-journey journey)
-    {:status 200 :body {:journey journey}})
+    {:status 200})
