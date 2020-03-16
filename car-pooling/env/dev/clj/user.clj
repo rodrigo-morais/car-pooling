@@ -6,6 +6,7 @@
     [clojure.spec.alpha :as s]
     [expound.alpha :as expound]
     [mount.core :as mount]
+    [car-pooling.data.core]
     [car-pooling.core :refer [start-app]]))
 
 (alter-var-root #'s/*explain-out* (constantly expound/printer))

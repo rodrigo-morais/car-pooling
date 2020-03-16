@@ -7,10 +7,18 @@
     [reitit.ring.middleware.muuntaja :as muuntaja]
     [reitit.ring.middleware.multipart :as multipart]
     [reitit.ring.middleware.parameters :as parameters]
+    [clojure.spec.alpha :as s]
     [car-pooling.middleware.formats :as formats]
     [car-pooling.middleware.exception :as exception]
+    [car-pooling.apis.cars :refer [load-cars]]
     [ring.util.http-response :refer :all]
     [clojure.java.io :as io]))
+
+(s/def ::id number?)
+(s/def ::seats number?)
+(s/def ::car (s/keys  :req-un [::id ::seats]))
+(s/def ::cars (s/coll-of ::car))
+(s/def ::fleet (s/keys :req-un [::cars]))
 
 (defn service-routes []
   [""
@@ -44,48 +52,16 @@
 
     ["/api-docs/*"
      {:get (swagger-ui/create-swagger-ui-handler
-             {:url "/api/swagger.json"
+             {:url "/swagger.json"
               :config {:validator-url nil}})}]]
 
-   ["/status"
-    {:get (constantly (ok {}))}]
+    ["/status"
+      {:get (constantly (ok {}))}]
    
-
-   ["/math"
-    {:swagger {:tags ["math"]}}
-
-    ["/plus"
-     {:get {:summary "plus with spec query parameters"
-            :parameters {:query {:x int?, :y int?}}
-            :responses {200 {:body {:total pos-int?}}}
-            :handler (fn [{{{:keys [x y]} :query} :parameters}]
-                       {:status 200
-                        :body {:total (+ x y)}})}
-      :post {:summary "plus with spec body parameters"
-             :parameters {:body {:x int?, :y int?}}
-             :responses {200 {:body {:total pos-int?}}}
-             :handler (fn [{{{:keys [x y]} :body} :parameters}]
-                        {:status 200
-                         :body {:total (+ x y)}})}}]]
-
-   ["/files"
-    {:swagger {:tags ["files"]}}
-
-    ["/upload"
-     {:post {:summary "upload a file"
-             :parameters {:multipart {:file multipart/temp-file-part}}
-             :responses {200 {:body {:name string?, :size int?}}}
-             :handler (fn [{{{:keys [file]} :multipart} :parameters}]
-                        {:status 200
-                         :body {:name (:filename file)
-                                :size (:size file)}})}}]
-
-    ["/download"
-     {:get {:summary "downloads a file"
-            :swagger {:produces ["image/png"]}
-            :handler (fn [_]
-                       {:status 200
-                        :headers {"Content-Type" "image/png"}
-                        :body (-> "public/img/warning_clojure.png"
-                                  (io/resource)
-                                  (io/input-stream))})}}]]])
+    ["/cars"
+      {:put {:summary "Load the list of available cars"
+              :parameters {:body ::fleet}
+              :responses {200 {:body {}}
+                          400 {:body {}}}
+              :handler (fn [{{{:keys [cars]} :body} :parameters}]
+                (load-cars cars))}}]])
