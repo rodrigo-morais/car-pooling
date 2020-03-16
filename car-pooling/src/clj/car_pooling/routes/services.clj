@@ -18,7 +18,6 @@
 (s/def ::seats number?)
 (s/def ::car (s/keys  :req-un [::id ::seats]))
 (s/def ::cars (s/coll-of ::car))
-(s/def ::fleet (s/keys :req-un [::cars]))
 
 (defn service-routes []
   [""
@@ -60,8 +59,8 @@
    
     ["/cars"
       {:put {:summary "Load the list of available cars"
-              :parameters {:body ::fleet}
+              :parameters {:body ::cars}
               :responses {200 {:body {}}
                           400 {:body {}}}
-              :handler (fn [{{{:keys [cars]} :body} :parameters}]
-                (load-cars cars))}}]])
+              :handler (fn [{{:keys [body]} :parameters}]
+                (load-cars body))}}]])
