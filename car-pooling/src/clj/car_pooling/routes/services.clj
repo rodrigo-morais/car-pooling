@@ -11,13 +11,18 @@
     [car-pooling.middleware.formats :as formats]
     [car-pooling.middleware.exception :as exception]
     [car-pooling.apis.cars :refer [load-cars]]
+    [car-pooling.apis.journey :refer [add-journey]]
     [ring.util.http-response :refer :all]
     [clojure.java.io :as io]))
 
 (s/def ::id number?)
 (s/def ::seats number?)
+(s/def ::people number?)
+
 (s/def ::car (s/keys  :req-un [::id ::seats]))
 (s/def ::cars (s/coll-of ::car))
+
+(s/def ::journey (s/keys  :req-un [::id ::people]))
 
 (defn service-routes []
   [""
@@ -63,4 +68,12 @@
               :responses {200 {:body {}}
                           400 {:body {}}}
               :handler (fn [{{:keys [body]} :parameters}]
-                (load-cars body))}}]])
+                (load-cars body))}}]
+
+    ["/journey"
+      {:post {:summary "Add a journey"
+              :parameters {:body ::journey}
+              :responses {200 {:body {}}
+                          400 {:body {}}}
+              :handler (fn [{{:keys [body]} :parameters}]
+                (add-journey body))}}]])

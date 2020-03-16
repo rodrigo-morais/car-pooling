@@ -6,7 +6,7 @@
 
 (deftest defstate
   (testing "core"
-    (let [data {:cars []}]
+    (let [data {:cars [] :journeys []}]
       (->
         (mount/only #{#'car-pooling.data.core/*data*})
         (mount/start))

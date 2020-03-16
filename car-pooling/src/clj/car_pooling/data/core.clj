@@ -3,7 +3,8 @@
     [mount.core :refer [defstate]]))
 
 (defn- initialise-data []
-  {:cars []})
+  {:cars []
+   :journeys []})
 
 (defstate ^:dynamic *data*
   :start  (atom (initialise-data))
