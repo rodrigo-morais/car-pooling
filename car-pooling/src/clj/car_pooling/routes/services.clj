@@ -55,8 +55,8 @@
              {:url "/swagger.json"
               :config {:validator-url nil}})}]]
 
-    ["/status"
-      {:get (constantly (ok {}))}]
+   ["/status"
+    {:get (constantly (ok {}))}]
    
     ["/cars"
       {:put {:summary "Load the list of available cars"
