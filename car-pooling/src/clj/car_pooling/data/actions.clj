@@ -12,3 +12,6 @@
 
   (defn add-journey [journey]
     (swap! db/*data* assoc :journeys (conj (:journeys @db/*data*) journey)))
+
+  (defn drop-off-journey [id]
+    (swap! db/*data* assoc :journeys (remove #(= (:id %) id) (:journeys @db/*data*))))

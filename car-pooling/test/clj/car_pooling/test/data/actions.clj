@@ -23,14 +23,14 @@
 
       (testing "add journeys"
         (testing "when journeys is empty"
-          (testing "returns the journeys with the new journey"
+          (testing "adds the journey to the journeys"
             (let [journey   {:id 1 :people 3}
                   result    [journey]]
               (ac/add-journey journey)
               (is (= (:journeys @db/*data*) result)))))
 
         (testing "when already exist journeys"
-          (testing "returns the current journeys with the new journey"
+          (testing "does not add the jorney to te journeys"
             (let [journeys  (:journeys @db/*data*)
                   journey   {:id 2 :people 4}
                   result    (conj journeys journey)]
@@ -45,5 +45,17 @@
         (testing "when journey does not exist"
           (testing "returns false"
             (is (= (ac/journey-exist? 3) false)))))
+
+      (testing "drop off journey"
+        (let [result [{:id 2 :people 4}]]
+          (testing "when the journey exists"
+            (testing "removes the journey"
+              (ac/drop-off-journey 1)
+              (is (= (:journeys @db/*data*) result))))
+
+          (testing "when the journey does not exist"
+            (testing "does not change the journeys"
+              (ac/drop-off-journey 3)
+              (is (= (:journeys @db/*data*) result))))))
 
       (mount/stop #'car-pooling.data.core/*data*))))

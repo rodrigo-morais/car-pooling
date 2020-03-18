@@ -9,3 +9,14 @@
         (do
           (ac/add-journey journey)
           {:status 200}))))
+
+  (defn drop-off-journey [id]
+    (let [_id (read-string id)
+          is-number? (number? _id)]
+      (if is-number?
+        (if (ac/journey-exist? _id)
+          (do
+            (ac/drop-off-journey _id)
+            {:status 200})
+          {:status 404})
+        {:status 400 :body {}})))
