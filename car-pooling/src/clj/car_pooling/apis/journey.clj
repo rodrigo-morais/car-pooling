@@ -3,5 +3,9 @@
     [car-pooling.data.actions :as ac]))
 
   (defn add-journey [journey]
-    (ac/add-journey journey)
-    {:status 200})
+    (let [id (get journey :id)]
+      (if (ac/journey-exist? id)
+        {:status 400 :body {}}
+        (do
+          (ac/add-journey journey)
+          {:status 200}))))
