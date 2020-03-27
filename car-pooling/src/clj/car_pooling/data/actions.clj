@@ -1,8 +1,18 @@
 (ns car-pooling.data.actions
   (:require [car-pooling.data.core :as db]))
 
-  (defn remove-available-cars [cars]
+  (defn- remove-available-cars [cars]
     (remove #(= (:available %) true) cars))
+
+  (defn- get-cars-ids []
+    (vec (map (fn [car] (get car :id)) (remove-available-cars (:cars @db/*data*)))))
+
+  (defn- car-exist? [id current-ids]
+    (boolean (some #(= id %) current-ids)))
+
+  (defn cars-exist? [cars]
+    (let [current-car-ids (get-cars-ids)]
+      (boolean (some #(= true %) (map (fn [car] (car-exist? (:id car) current-car-ids)) cars)))))
 
   (defn load-cars [cars]
     (let [current-cars  (remove-available-cars (:cars @db/*data*))

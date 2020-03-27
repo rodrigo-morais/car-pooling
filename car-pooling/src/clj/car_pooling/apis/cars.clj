@@ -2,5 +2,8 @@
   (:require [car-pooling.data.actions :as ac]))
 
   (defn load-cars [cars]
-    (ac/load-cars cars)
-    {:status 200})
+    (if (ac/cars-exist? cars)
+      {:status 400 :body {}}
+      (do
+        (ac/load-cars cars)
+        {:status 200})))
