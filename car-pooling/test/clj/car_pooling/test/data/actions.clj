@@ -8,12 +8,13 @@
 (deftest defstate
   (testing "actions"
     (testing "load cars"
-      (let [cars [{:id 1 :seats 2} {:id 2 :seats 4}]]
+      (let [cars [{:id 1 :seats 2} {:id 2 :seats 4}]
+            result (map (fn [car] (assoc car :available true)) cars)]
         (->
           (mount/only #{#'car-pooling.data.core/*data*})
           (mount/start))
         (ac/load-cars cars)
-        (is (= (:cars @db/*data*) cars))
+        (is (= (:cars @db/*data*) result))
         (mount/stop #'car-pooling.data.core/*data*)))
 
     (testing "journeys"
@@ -25,7 +26,7 @@
         (testing "when journeys is empty"
           (testing "adds the journey to the journeys"
             (let [journey   {:id 1 :people 3}
-                  result    [journey]]
+                  result    [(assoc journey :car nil)]]
               (ac/add-journey journey)
               (is (= (:journeys @db/*data*) result)))))
 
@@ -33,7 +34,7 @@
           (testing "does not add the jorney to te journeys"
             (let [journeys  (:journeys @db/*data*)
                   journey   {:id 2 :people 4}
-                  result    (conj journeys journey)]
+                  result    (conj journeys (assoc journey :car nil))]
               (ac/add-journey journey)
               (is (= (:journeys @db/*data*) result))))))
 
@@ -47,7 +48,7 @@
             (is (= (ac/journey-exist? 3) false)))))
 
       (testing "drop off journey"
-        (let [result [{:id 2 :people 4}]]
+        (let [result [{:id 2 :people 4 :car nil}]]
           (testing "when the journey exists"
             (testing "removes the journey"
               (ac/drop-off-journey 1)
