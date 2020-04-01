@@ -89,7 +89,7 @@
               :handler (fn [{{{:keys [ID]} :form} :parameters}]
                 (drop-off-journey ID))}}]
 
-  ["/locale"
+  ["/locate"
       {:post {:summary "Return the car the group is traveling"
               :swagger {:consumes ["application/x-www-form-urlencoded"]
                         :produces ["application/x-www-form-urlencoded"]}
