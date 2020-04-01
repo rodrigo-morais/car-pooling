@@ -34,7 +34,9 @@
                   is-waiting? (nil? car)]
               (if is-waiting?
                 {:status 204}
-                {:status 200 :body {:car car}}))
+                (do
+                  (println @db/*data*)
+                  {:status 200 :body {:car "car" :id "id" :result car :journeys (:journeys @db/*data*)}})))
             {:status 404})
           {:status 400 :body {}}))
       (catch Exception ex
