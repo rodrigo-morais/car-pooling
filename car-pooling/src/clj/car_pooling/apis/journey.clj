@@ -36,7 +36,7 @@
                 {:status 204}
                 (do
                   (println @db/*data*)
-                  {:status 200 :body {:car "car" :id "id" :result car :journeys (:journeys @db/*data*)}})))
+                  {:status 200 :body {:car { :id 99 } :result car :journeys (:journeys @db/*data*)}})))
             {:status 404})
           {:status 400 :body {}}))
       (catch Exception ex
