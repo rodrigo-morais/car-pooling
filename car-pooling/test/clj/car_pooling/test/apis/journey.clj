@@ -59,7 +59,7 @@
 
         (testing "when the id is valid and the journey has a valid car"
           (testing "returns 200 as status"
-            (is (= (get-journey-car "1") {:status 200 :body {:car 1}})))
+            (is (= (get-journey-car "1") {:status 200 :body {:id 1}})))
 
           (testing "calls `get-journey-car` from data.actions"
             (let [call-get-journey-car (atom 0)]
