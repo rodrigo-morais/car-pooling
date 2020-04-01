@@ -7,20 +7,18 @@
 
 (deftest defstate
   (testing "actions"
+    (->
+      (mount/only #{#'car-pooling.data.core/*data*})
+      (mount/start))
+
     (testing "load cars"
       (let [cars [{:id 1 :seats 2} {:id 2 :seats 4}]
             result (map (fn [car] (assoc car :available true)) cars)]
-        (->
-          (mount/only #{#'car-pooling.data.core/*data*})
-          (mount/start))
         (ac/load-cars cars)
-        (is (= (:cars @db/*data*) result))
-        (mount/stop #'car-pooling.data.core/*data*)))
+        (is (= (:cars @db/*data*) result))))
 
     (testing "journeys"
-      (->
-        (mount/only #{#'car-pooling.data.core/*data*})
-        (mount/start))
+      (reset! db/*data* {:cars [] :journeys []})
 
       (testing "add journeys"
         (testing "when journeys is empty"
@@ -43,20 +41,66 @@
           (testing "returns true"
             (is (= (ac/journey-exist? 1) true))))
 
-        (testing "when journey does not exist"
-          (testing "returns false"
-            (is (= (ac/journey-exist? 3) false)))))
+          (testing "when journey does not exist"
+            (testing "returns false"
+              (is (= (ac/journey-exist? 3) false)))))
 
-      (testing "drop off journey"
-        (let [result [{:id 2 :people 4 :car nil}]]
-          (testing "when the journey exists"
-            (testing "removes the journey"
-              (ac/drop-off-journey 1)
-              (is (= (:journeys @db/*data*) result))))
+        (testing "drop off journey"
+          (let [result [{:id 2 :people 4 :car nil}]]
+            (testing "when the journey exists"
+              (testing "removes the journey"
+                (ac/drop-off-journey 1)
+                (is (= (:journeys @db/*data*) result))))
 
-          (testing "when the journey does not exist"
-            (testing "does not change the journeys"
-              (ac/drop-off-journey 3)
-              (is (= (:journeys @db/*data*) result))))))
+            (testing "when the journey does not exist"
+              (testing "does not change the journeys"
+                (ac/drop-off-journey 3)
+                (is (= (:journeys @db/*data*) result))))))
 
-      (mount/stop #'car-pooling.data.core/*data*))))
+    (testing "watcher"
+      (let [journey {:id 1 :people 3 :car nil}
+            journeys [journey]
+            car-id 1
+            car {:id car-id :seats 3 :available true}
+            cars [car]]
+        (reset! db/*data* {:cars cars :journeys journeys})
+      (testing  "connect car to journey"
+          (testing "returns a new journey with a car"
+            (ac/connect-car-to-journey journey)
+            (is (= (:car (first (:journeys @db/*data*))) car-id))))
+      (testing  "make car unvailable"
+          (testing "returns a car unavailable"
+            (ac/make-car-unavailable car-id)
+            (let [cars-by-id (first (filter (fn [_car] (= (:id _car) car-id)) (:cars @db/*data*)))
+                  is-available (:available cars-by-id)]
+              (is (not is-available)))))
+      (testing  "make car available"
+          (testing "returns a car available"
+            (ac/make-car-available car-id)
+            (let [cars-by-id (first (filter (fn [_car] (= (:id _car) car-id)) (:cars @db/*data*)))
+                  is-available (:available cars-by-id)]
+              (is is-available)))))
+      (testing "start journeys with avaible cars"
+        (testing "when journeys have enough cars"
+          (let [cars [{:id 1 :seats 2 :available true} {:id 2 :seats 4 :available true} {:id 3 :seats 6 :available true}]
+                journeys [{:id 1 :people 2 :car nil} {:id 2 :people 6 :car nil}]]
+            (reset! db/*data* {:cars cars :journeys journeys})
+            (ac/start-journeys-with-avaliable-cars cars)
+            (doseq [journey (:journeys @db/*data*)]
+             (is (not (nil? (:car journey)))))))
+        (testing "when journeys does not have enough available cars"
+          (let [cars [{:id 1 :seats 2 :available true}]
+                journeys [{:id 1 :people 2 :car nil} {:id 2 :people 6 :car nil}]]
+            (reset! db/*data* {:cars cars :journeys journeys})
+            (ac/start-journeys-with-avaliable-cars cars)
+            (doseq [journey (:journeys @db/*data*)]
+             (is (some #(nil? (:car %)) (:journeys @db/*data*))))))
+        (testing "when a journey need more seats than cars can offer"
+          (let [cars [{:id 1 :seats 2 :available true} {:id 2 :seats 4 :available true}]
+                journeys [{:id 1 :people 2 :car nil} {:id 2 :people 6 :car nil}]]
+            (reset! db/*data* {:cars cars :journeys journeys})
+            (ac/start-journeys-with-avaliable-cars cars)
+            (doseq [journey (:journeys @db/*data*)]
+             (is (some #(nil? (:car %)) (:journeys @db/*data*))))))))
+
+    (mount/stop #'car-pooling.data.core/*data*))))

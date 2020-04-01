@@ -30,3 +30,42 @@
 
   (defn drop-off-journey [id]
     (swap! db/*data* assoc :journeys (remove #(= (:id %) id) (:journeys @db/*data*))))
+
+  (defn- update-journey [journey-id car-id]
+    (map (fn [journey] (if (= (:id journey) journey-id) (assoc journey :car car-id) journey)) (:journeys @db/*data*)))
+
+  (defn- add-car-to-journey [journey-id car-id]
+    (let [updated-journeys (update-journey journey-id car-id)]
+      (swap! db/*data* assoc :journeys updated-journeys)))
+
+  (defn connect-car-to-journey [journey]
+    (let [minimum-seats (:people journey)
+          cars (:cars @db/*data*)
+          is-available? (fn [car] (and (= (:available car) true) (>= (:seats car) minimum-seats)))
+          cars-availables (sort-by :seats (filter is-available? cars))
+          car (first cars-availables)]
+      (add-car-to-journey (:id journey) (:id car))))
+
+  (defn- update-car [car-id available]
+    (map (fn [car] (if (= (:id car) car-id) (assoc car :available available) car)) (:cars @db/*data*)))
+
+  (defn make-car-unavailable [car-id]
+    (let [available false]
+      (swap! db/*data* assoc :cars (update-car car-id available))))
+
+  (defn make-car-available [car-id]
+    (let [available true]
+      (swap! db/*data* assoc :cars (update-car car-id available))))
+
+  (defn start-journeys-with-avaliable-cars [cars]
+    (let [is-available? (fn [car] (= (:available car) true))
+          sorted-cars (vec (sort-by :seats (filter is-available? cars)))]
+      (doseq [car sorted-cars]
+        (let [journeys (:journeys @db/*data*)
+              is-waiting (fn [journey] (nil? (:car journey)))
+              waiting-journeys (filter is-waiting journeys)
+              fits-in-the-car? (fn [journey] (<= (:people journey) (:seats car)))
+              filtered-journeys (filter fits-in-the-car? waiting-journeys)
+              sorted-journeys (reverse (sort-by :people filtered-journeys))
+              journey (first sorted-journeys)]
+          (if (not (nil? journey)) (add-car-to-journey (:id journey) (:id car)))))))

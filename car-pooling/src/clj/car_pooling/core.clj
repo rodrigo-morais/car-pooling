@@ -6,6 +6,8 @@
     [car-pooling.config :refer [env]]
     [clojure.tools.cli :refer [parse-opts]]
     [clojure.tools.logging :as log]
+    [car-pooling.data.core :as db]
+    [car-pooling.data.watcher :refer [watch-changes]]
     [mount.core :as mount])
   (:gen-class))
 
@@ -50,7 +52,8 @@
                         (parse-opts cli-options)
                         mount/start-with-args
                         :started)]
-    (log/info component "started"))
+    (log/info component "started")
+    (add-watch db/*data* :watcher watch-changes))
   (.addShutdownHook (Runtime/getRuntime) (Thread. stop-app)))
 
 (defn -main [& args]
