@@ -11,12 +11,32 @@
           {:status 200}))))
 
   (defn drop-off-journey [id]
-    (let [_id (read-string id)
-          is-number? (number? _id)]
-      (if is-number?
-        (if (ac/journey-exist? _id)
-          (do
-            (ac/drop-off-journey _id)
-            {:status 200})
-          {:status 404})
+    (try
+      (let [_id (read-string id)
+            is-number? (number? _id)]
+        (if is-number?
+          (if (ac/journey-exist? _id)
+            (do
+              (ac/drop-off-journey _id)
+              {:status 200})
+            {:status 404})
+          {:status 400 :body {}}))
+      (catch Exception ex
         {:status 400 :body {}})))
+
+  (defn get-journey-car [id]
+    (try
+      (let [_id (read-string id)
+            is-number? (number? _id)]
+        (if is-number?
+          (if (ac/journey-exist? _id)
+            (let [car (ac/get-journey-car _id)
+                  is-waiting? (nil? car)]
+              (if is-waiting?
+                {:status 204}
+                {:status 200 :body {:car car}}))
+            {:status 404})
+          {:status 400 :body {}}))
+      (catch Exception ex
+        {:status 400 :body {}})))
+

@@ -11,7 +11,7 @@
     [car-pooling.middleware.formats :as formats]
     [car-pooling.middleware.exception :as exception]
     [car-pooling.apis.cars :refer [load-cars]]
-    [car-pooling.apis.journey :refer [add-journey drop-off-journey]]
+    [car-pooling.apis.journey :refer [add-journey drop-off-journey get-journey-car]]
     [ring.util.http-response :refer :all]
     [clojure.java.io :as io]))
 
@@ -87,4 +87,16 @@
                           404 {:body nil}
                           400 {:body {}}}
               :handler (fn [{{{:keys [ID]} :form} :parameters}]
-                (drop-off-journey ID))}}]])
+                (drop-off-journey ID))}}]
+
+  ["/locale"
+      {:post {:summary "Return the car the group is traveling"
+              :swagger {:consumes ["application/x-www-form-urlencoded"]
+                        :produces ["application/x-www-form-urlencoded"]}
+              :parameters {:form {:ID string?}}
+              :responses {200 {:body {}}
+                          204 {:body nil}
+                          404 {:body nil}
+                          400 {:body {}}}
+              :handler (fn [{{{:keys [ID]} :form} :parameters}]
+                (get-journey-car ID))}}]])

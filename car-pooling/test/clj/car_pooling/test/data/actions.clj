@@ -57,6 +57,20 @@
                 (ac/drop-off-journey 3)
                 (is (= (:journeys @db/*data*) result))))))
 
+        (testing "get journey car"
+          (reset! db/*data* {:cars [{:id 1 :seats 2 :available true}] :journeys [{:id 1 :people 2 :car 1} {:id 2 :people 6 :car nil}]})
+          (testing "when the journey has a valid car"
+              (testing "returns the car id"
+                (is (= (ac/get-journey-car 1) 1))))
+
+          (testing "when the journey does not have a car"
+            (testing "returns nil"
+              (is (nil? (ac/get-journey-car 2)))))
+
+          (testing "when the journey does not exist"
+            (testing "returns nil"
+              (is (nil? (ac/get-journey-car 5))))))
+
     (testing "watcher"
       (let [journey {:id 1 :people 3 :car nil}
             journeys [journey]

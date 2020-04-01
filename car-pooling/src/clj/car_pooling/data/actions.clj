@@ -22,6 +22,9 @@
   (defn- get-journeys-ids []
     (vec (map (fn [journey] (get journey :id)) (:journeys @db/*data*))))
 
+  (defn get-journey-car [id]
+    (:car (first (filter #(= id (:id %)) (:journeys @db/*data*)))))
+
   (defn journey-exist? [id]
     (boolean (some #(= id %) (get-journeys-ids))))
 
