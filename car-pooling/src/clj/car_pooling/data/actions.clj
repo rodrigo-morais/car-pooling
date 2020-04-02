@@ -71,7 +71,7 @@
     (let [is-available? (fn [car] (> (:seats-available car) 0))
           sorted-cars (vec (sort-by :seats-available (filter is-available? cars)))]
       (doseq [car sorted-cars]
-        (let [journeys (:journeys @db/*data*)
+        (let [journeys (sort-by :id (:journeys @db/*data*))
               is-waiting (fn [journey] (nil? (:car journey)))
               waiting-journeys (filter is-waiting journeys)
               fits-in-the-car? (fn [journey] (<= (:people journey) (:seats car)))
