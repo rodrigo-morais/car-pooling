@@ -77,5 +77,5 @@
               fits-in-the-car? (fn [journey] (<= (:people journey) (:seats-available car)))
               filtered-journeys (filter fits-in-the-car? waiting-journeys)
               sorted-journeys (reverse (sort-by :id filtered-journeys))
-              journey (first sorted-journeys)]
+              journey (first filtered-journeys)]
           (if (not (nil? journey)) (add-car-to-journey (:id journey) (:id car)))))))
