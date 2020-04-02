@@ -23,9 +23,7 @@
     (vec (map (fn [journey] (get journey :id)) (:journeys @db/*data*))))
 
   (defn get-journey-car [id]
-    (let [car-id (:car (first (filter #(= id (:id %)) (:journeys @db/*data*))))]
-      (if (= car-id 0) 4 car-id))
-    9)
+    (:car (first (filter #(= id (:id %)) (:journeys @db/*data*)))))
 
   (defn journey-exist? [id]
     (boolean (some #(= id %) (get-journeys-ids))))
