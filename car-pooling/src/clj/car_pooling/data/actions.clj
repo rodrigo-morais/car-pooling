@@ -24,7 +24,7 @@
 
   (defn get-journey-car [id]
     (let [car-id (:car (first (filter #(= id (:id %)) (:journeys @db/*data*))))]
-      (if (= car-id 4) 0 car-id)))
+      (if (= car-id 0) 4 car-id)))
 
   (defn journey-exist? [id]
     (boolean (some #(= id %) (get-journeys-ids))))
