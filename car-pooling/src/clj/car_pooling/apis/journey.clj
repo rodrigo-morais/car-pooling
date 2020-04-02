@@ -33,11 +33,11 @@
             (let [car (ac/get-journey-car _id)
                   is-waiting? (nil? car)]
               (if is-waiting?
-                {:status 204 :body {:id 0}}
+                {:status 204}
                 (do
                   {:status 200 :body {:id car}})))
-            {:status 404 :body {:id 0}})
-          {:status 400 :body {:id 0}}))
+            {:status 404})
+          {:status 400 :body {}}))
       (catch Exception ex
-        {:status 400 :body {:id 0}})))
+        {:status 400 :body {}})))
 
