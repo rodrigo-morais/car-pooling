@@ -25,7 +25,7 @@
         {:status 400 :body {}})))
 
   (defn get-journey-car [id]
-    {:status 200 :body {:id car}})
+    {:status 200 :body {:id 8}})
 
 ;;    (try
 ;;      (let [_id (read-string id)
