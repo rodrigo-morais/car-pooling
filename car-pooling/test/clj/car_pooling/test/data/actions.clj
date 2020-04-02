@@ -13,7 +13,7 @@
 
     (testing "load cars"
       (let [cars [{:id 1 :seats 2} {:id 2 :seats 4}]
-            result (map (fn [car] (assoc car :available true)) cars)]
+            result (map (fn [car] (assoc car :seats-available (:seats car))) cars)]
         (ac/load-cars cars)
         (is (= (:cars @db/*data*) result))))
 
@@ -58,7 +58,7 @@
                 (is (= (:journeys @db/*data*) result))))))
 
         (testing "get journey car"
-          (reset! db/*data* {:cars [{:id 1 :seats 2 :available true}] :journeys [{:id 1 :people 2 :car 1} {:id 2 :people 6 :car nil}]})
+          (reset! db/*data* {:cars [{:id 1 :seats 2 :seats-available 2}] :journeys [{:id 1 :people 2 :car 1} {:id 2 :people 6 :car nil}]})
           (testing "when the journey has a valid car"
               (testing "returns the car id"
                 (is (= (ac/get-journey-car 1) 1))))
@@ -75,7 +75,7 @@
       (let [journey {:id 1 :people 3 :car nil}
             journeys [journey]
             car-id 1
-            car {:id car-id :seats 3 :available true}
+            car {:id car-id :seats 3 :seats-available 3}
             cars [car]]
         (reset! db/*data* {:cars cars :journeys journeys})
       (testing  "connect car to journey"
@@ -84,33 +84,33 @@
             (is (= (:car (first (:journeys @db/*data*))) car-id))))
       (testing  "make car unvailable"
           (testing "returns a car unavailable"
-            (ac/make-car-unavailable car-id)
+            (ac/make-car-seats-unavailable car-id 3)
             (let [cars-by-id (first (filter (fn [_car] (= (:id _car) car-id)) (:cars @db/*data*)))
-                  is-available (:available cars-by-id)]
-              (is (not is-available)))))
+                  is-unavailable (zero? (:seats-available cars-by-id))]
+              (is is-unavailable))))
       (testing  "make car available"
           (testing "returns a car available"
-            (ac/make-car-available car-id)
+            (ac/make-car-seats-available car-id)
             (let [cars-by-id (first (filter (fn [_car] (= (:id _car) car-id)) (:cars @db/*data*)))
-                  is-available (:available cars-by-id)]
+                  is-available (= (:seats-available cars-by-id) (:seats cars-by-id))]
               (is is-available)))))
       (testing "start journeys with avaible cars"
         (testing "when journeys have enough cars"
-          (let [cars [{:id 1 :seats 2 :available true} {:id 2 :seats 4 :available true} {:id 3 :seats 6 :available true}]
+          (let [cars [{:id 1 :seats 2 :seats-available 2} {:id 2 :seats 4 :seats-available 4} {:id 3 :seats 6 :seats-available 6}]
                 journeys [{:id 1 :people 2 :car nil} {:id 2 :people 6 :car nil}]]
             (reset! db/*data* {:cars cars :journeys journeys})
             (ac/start-journeys-with-avaliable-cars cars)
             (doseq [journey (:journeys @db/*data*)]
              (is (not (nil? (:car journey)))))))
         (testing "when journeys does not have enough available cars"
-          (let [cars [{:id 1 :seats 2 :available true}]
+          (let [cars [{:id 1 :seats 2 :seats-available 2}]
                 journeys [{:id 1 :people 2 :car nil} {:id 2 :people 6 :car nil}]]
             (reset! db/*data* {:cars cars :journeys journeys})
             (ac/start-journeys-with-avaliable-cars cars)
             (doseq [journey (:journeys @db/*data*)]
              (is (some #(nil? (:car %)) (:journeys @db/*data*))))))
         (testing "when a journey need more seats than cars can offer"
-          (let [cars [{:id 1 :seats 2 :available true} {:id 2 :seats 4 :available true}]
+          (let [cars [{:id 1 :seats 2 :seats-available 2} {:id 2 :seats 4 :seats-available 4}]
                 journeys [{:id 1 :people 2 :car nil} {:id 2 :people 6 :car nil}]]
             (reset! db/*data* {:cars cars :journeys journeys})
             (ac/start-journeys-with-avaliable-cars cars)

@@ -17,5 +17,5 @@
     (cond
       made-cars-available? (ac/start-journeys-with-avaliable-cars made-cars-available)
       added-journey? (ac/connect-car-to-journey (first diff-journey))
-      removed-journey? (ac/make-car-available (:car (first removed-journey)))
-      connected-journey? (ac/make-car-unavailable (:car (first diff-journey))))))
+      removed-journey? (ac/make-car-seats-available (:car (first removed-journey)))
+      connected-journey? (ac/make-car-seats-unavailable (:car (first diff-journey)) (:people (first diff-journey))))))
