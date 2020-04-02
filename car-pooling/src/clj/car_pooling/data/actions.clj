@@ -69,12 +69,12 @@
 
   (defn start-journeys-with-avaliable-cars [cars]
     (let [is-available? (fn [car] (> (:seats-available car) 0))
-          sorted-cars (vec (sort-by :seats-available (filter is-available? cars)))]
+          sorted-cars (vec (sort-by :seats-available (sort-by :id (filter is-available? cars))))]
       (doseq [car sorted-cars]
         (let [journeys (sort-by :id (:journeys @db/*data*))
               is-waiting (fn [journey] (nil? (:car journey)))
               waiting-journeys (filter is-waiting journeys)
-              fits-in-the-car? (fn [journey] (<= (:people journey) (:seats car)))
+              fits-in-the-car? (fn [journey] (<= (:people journey) (:seats-available car)))
               filtered-journeys (filter fits-in-the-car? waiting-journeys)
               sorted-journeys (reverse (sort-by :id filtered-journeys))
               journey (first sorted-journeys)]
