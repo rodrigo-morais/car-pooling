@@ -45,7 +45,7 @@
     (let [minimum-seats (:people journey)
           cars (:cars @db/*data*)
           is-available? (fn [car] (>= (:seats-available car) minimum-seats))
-          cars-availables (sort-by :seats-available (filter is-available? cars))
+          cars-availables (sort-by :id (sort-by :seats-available (filter is-available? cars)))
           car (first cars-availables)]
       (add-car-to-journey (:id journey) (:id car))))
 
@@ -69,7 +69,7 @@
 
   (defn start-journeys-with-avaliable-cars [cars]
     (let [is-available? (fn [car] (> (:seats-available car) 0))
-          sorted-cars (vec (sort-by :seats-available (sort-by :id (filter is-available? cars))))]
+          sorted-cars (vec (sort-by :id (sort-by :seats-available (filter is-available? cars))))]
       (doseq [car sorted-cars]
         (let [journeys (sort-by :id (:journeys @db/*data*))
               is-waiting (fn [journey] (nil? (:car journey)))
