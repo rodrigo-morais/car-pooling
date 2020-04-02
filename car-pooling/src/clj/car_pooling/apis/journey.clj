@@ -25,19 +25,21 @@
         {:status 400 :body {}})))
 
   (defn get-journey-car [id]
-    (try
-      (let [_id (read-string id)
-            is-number? (number? _id)]
-        (if is-number?
-          (if (ac/journey-exist? _id)
-            (let [car (ac/get-journey-car _id)
-                  is-waiting? (nil? car)]
-              (if is-waiting?
-                {:status 204 :body {:id 0}}
-                (do
-                  {:status 200 :body {:id car}})))
-            {:status 404 :body {:id 0}})
-          {:status 400 :body {:id 0}}))
-      (catch Exception ex
-        {:status 400 :body {:id 0}})))
+    {:status 200 :body {:id car}})
+
+;;    (try
+;;      (let [_id (read-string id)
+;;            is-number? (number? _id)]
+;;        (if is-number?
+;;          (if (ac/journey-exist? _id)
+;;            (let [car (ac/get-journey-car _id)
+;;                  is-waiting? (nil? car)]
+;;              (if is-waiting?
+;;                {:status 204 :body {:id 0}}
+;;                (do
+;;                  {:status 200 :body {:id car}})))
+;;            {:status 404 :body {:id 0}})
+;;          {:status 400 :body {:id 0}}))
+;;      (catch Exception ex
+;;        {:status 400 :body {:id 0}})))
 
